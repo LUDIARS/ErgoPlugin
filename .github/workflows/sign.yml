@@ -1,0 +1,40 @@
+name: sign-index
+
+# main への push (= Revisor の審査を通って公開された変更) だけで署名する。
+# PR・フォークからは動かさない (secret を渡さない)。署名済みのファイルは main に書き戻さず Release に添付する。
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sign-index
+  cancel-in-progress: false
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    environment: signing
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check
+        run: node scripts/check.mjs
+      - name: Test
+        run: node --test tests/*.test.mjs
+      - name: Sign
+        env:
+          ERGO_PLUGIN_SIGNING_KEY: ${{ secrets.ERGO_PLUGIN_SIGNING_KEY }}
+        run: node scripts/sign-release.mjs --serial "${{ github.run_number }}" --out dist
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "index-${{ github.run_number }}" dist/index.signed.json dist/revoked.signed.json dist/signing.pem \
+            --title "index ${{ github.run_number }}" \
+            --notes "Signed plugin index for ${{ github.sha }}" \
+            --target "${{ github.sha }}" --latest

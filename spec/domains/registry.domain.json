@@ -1,0 +1,16 @@
+{
+  "presetRules": [],
+  "templateRules": [],
+  "name": "Plugin Registry",
+  "description": "Ergo のプラグイン索引・発行者・失効リストのデータと、その検査と GitHub Actions での Ed25519 署名。Node 標準だけで書く。",
+  "membership": [
+    { "pathPattern": "^(index\\.json|publishers/|trust/)" },
+    { "pathPattern": "(^|/)scripts/" },
+    { "pathPattern": "(^|/)tests/" },
+    { "pathPattern": "^\\.github/" }
+  ],
+  "cardTemplate": "Summarise the \"Plugin Registry\" domain: 索引の検査と署名。",
+  "mechanics": ["registry-validation", "canonical-json", "ed25519-signing", "release-publish"],
+  "specRefs": ["spec/SPEC.md"],
+  "rationale": "置き場の正本データと、それを署名して配る手順。Studio 側の検証は Ergo が持つ。"
+}

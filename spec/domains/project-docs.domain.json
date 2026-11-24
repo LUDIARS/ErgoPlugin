@@ -1,0 +1,14 @@
+{
+  "presetRules": [],
+  "templateRules": [],
+  "name": "Project Docs",
+  "description": "仕様・ドメイン定義・リポの設定 (README / CLAUDE.md / package.json / .gitignore)。",
+  "membership": [
+    { "pathPattern": "(^|/)spec/" },
+    { "pathPattern": "^(README\\.md|CLAUDE\\.md|package\\.json|\\.gitignore)$" }
+  ],
+  "cardTemplate": "Summarise the \"Project Docs\" domain: 仕様とリポ設定。",
+  "mechanics": ["spec"],
+  "specRefs": ["spec/SPEC.md"],
+  "rationale": "コードを持たない文書と設定。"
+}
